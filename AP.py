@@ -1,3 +1,5 @@
+#WARNING: This is still a work in progress and it's mostly proof of concept code
+
 import network
 import socket
 from machine import Pin

@@ -134,6 +134,6 @@ for i, color in enumerate(colors):
 
 # Main loop
 while True:
-    # send_nec_message(LIGHTS_OnOffToggle)
+    # send_nec_message(LIGHTS_OnOffToggle) # Epilepsy warning
 
     time.sleep(1/8)  # Keep the program running
