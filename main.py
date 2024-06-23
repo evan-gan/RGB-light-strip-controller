@@ -49,46 +49,6 @@ def send_nec_message(command, log = False):
     if log is True:
         print(f"SENT: NEC message with Address: {address}, Command: {command}")
 
-
-#Custom functions!
-
-def interpolate_colors(color1, color2, length):
-    # Split the input colors into their RGB components
-    r1, g1, b1 = color1
-    r2, g2, b2 = color2
-
-    # Function to interpolate between two values
-    def interpolate(start, end, factor):
-        return int(start + (end - start) * factor)
-
-    # Generate the interpolated colors
-    interpolated_colors = [
-        (
-            interpolate(r1, r2, i / (length - 1)),
-            interpolate(g1, g2, i / (length - 1)),
-            interpolate(b1, b2, i / (length - 1))
-        )
-        for i in range(length)
-    ]
-
-    return interpolated_colors
-
-def resetLights():
-    global LIGHTS_R, LIGHTS_G, LIGHTS_B
-    send_nec_message(LIGHTS_initPreset)
-    for num in range(0, 25 + 1):
-        send_nec_message(LIGHTS_increaseRed)
-        send_nec_message(LIGHTS_increaseBlue)
-        send_nec_message(LIGHTS_increaseGreen)
-        print(f"Getting lighter! ({num}/26)")
-
-    for num in range(0, 6 + 1):
-        send_nec_message(LIGHTS_brighten)
-        print(f"Getting brighter! ({num}/7)")
-    LIGHTS_R = 27
-    LIGHTS_G = 27
-    LIGHTS_B = 27
-
 def setRGB(color):
     red, green, blue = color
     global LIGHTS_R, LIGHTS_G, LIGHTS_B
@@ -118,13 +78,53 @@ def setRGB(color):
             send_nec_message(LIGHTS_decreaseBlue)
             LIGHTS_B -= 1
 
+def resetLights():
+    global LIGHTS_R, LIGHTS_G, LIGHTS_B
+    send_nec_message(LIGHTS_initPreset)
+    for num in range(0, 25 + 1):
+        send_nec_message(LIGHTS_increaseRed)
+        send_nec_message(LIGHTS_increaseBlue)
+        send_nec_message(LIGHTS_increaseGreen)
+        print(f"Getting lighter! ({num}/26)")
 
-resetLights()
+    for num in range(0, 6 + 1):
+        send_nec_message(LIGHTS_brighten)
+        print(f"Getting brighter! ({num}/7)")
+    LIGHTS_R = 27
+    LIGHTS_G = 27
+    LIGHTS_B = 27
+
+
+#You can customize the functions below however you want!
+    #Use setRGB((r,g,b)) to set the light's colors!
+
+def interpolate_colors(color1, color2, length):
+    # Split the input colors into their RGB components
+    r1, g1, b1 = color1
+    r2, g2, b2 = color2
+
+    # Function to interpolate between two values
+    def interpolate(start, end, factor):
+        return int(start + (end - start) * factor)
+
+    # Generate the interpolated colors
+    interpolated_colors = [
+        (
+            interpolate(r1, r2, i / (length - 1)),
+            interpolate(g1, g2, i / (length - 1)),
+            interpolate(b1, b2, i / (length - 1))
+        )
+        for i in range(length)
+    ]
+
+    return interpolated_colors
+
+resetLights() # Highly recommended you leave this one alone, otherwise your colors will be wacky
 
 # Example usage
 color_start = (27, 0, 0)  # Red
 setRGB(color_start)
-color_end = (0, 0, 27)    # Blue
+color_end = (0, 13, 27)    # Blue
 length = 10
 
 colors = interpolate_colors(color_start, color_end, length)
